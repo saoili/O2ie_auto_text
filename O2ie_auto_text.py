@@ -1,5 +1,6 @@
 from selenium import webdriver
-
+import time
+from login_details import loginDetails
 
 def open_o2_in_browser():
     browser = webdriver.Firefox()
@@ -35,7 +36,13 @@ def enter_username_and_password_and_hit_login(browser,username,password):
     return browser
     
 def go_to_webtext_page(browser):
-    browser.find_element_by_class_name("myO2Webtext").click()
+    while True:
+        try:
+            browser.find_element_by_class_name("myO2Webtext").click()
+        except NoSuchElementException:
+            time.sleep(1)
+            continue
+        break
 
 def enter_message(browser,message):
     try:
@@ -52,7 +59,8 @@ def enter_message(browser,message):
 if __name__ == '__main__':
     
     browser = open_o2_in_browser()
-    loginDetails = {"user1":"password 1", "user2": "password 2"}
+        
+    #loginDetails = {"0863799601": "Bhaa9601"} 
     message = ask_for_message()
     for username in loginDetails:        
         password = loginDetails[username]
@@ -77,7 +85,7 @@ if __name__ == '__main__':
             input ("hit enter when names appear")
             try:
                 browser.find_element_by_partial_link_text(partial_link_text).click()
-                #input ("change to own number and hit enter")
+                input ("change to own number and hit enter")
                 browser.find_element_by_id("imgSendYourText").click()
                 print ("sent to " + partial_link_text)
             except:
